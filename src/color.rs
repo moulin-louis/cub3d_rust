@@ -33,8 +33,6 @@ fn draw_this_tex( data: &Tdata, math: &Tmath, texture: &Image) {
 	let mut tex_y:u32;
 	while y <= math.draw_e {
 		tex_y = tex_pos as u32;
-		//println!("tex_y = {}", tex_y);
-		//println!("y = {}", y);
 		tex_pos += step;
 		if tex_y == texture.width as u32 {
 			tex_y -= 1;

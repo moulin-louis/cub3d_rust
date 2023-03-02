@@ -92,6 +92,11 @@ async fn main() {
 		}
 		let fps = get_fps();
 		draw_text(fps.to_string().as_str(), 10.0, 10.0, 14.0, GREEN);
-		next_frame().await;
+		let minimum_frame_time = 1.0 / 60.0; // 60 FPS
+		let frame_time = get_frame_time();
+		if frame_time < minimum_frame_time {
+			let time_to_sleep = (minimum_frame_time - frame_time) * 1000.;
+		}
+			next_frame().await;
 	}
 }
