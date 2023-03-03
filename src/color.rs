@@ -28,7 +28,7 @@ fn draw_this_tex( data: &mut Tdata, math: &Tmath, texture: &Image) {
 	let x: u32 = calcul_text_coor(texture, math, wall_hit);
 	let step: f32 = (1.0 * texture.height as f32) / math.line_height as f32;
 	let mut tex_pos: f32 = (math.draw_s as f32 - screen_height() / 2.0 + math.line_height as f32 / 2.0) * step;
-	let mut y:u32 = math.draw_s - 1;
+	let mut y:u32 = math.draw_s;
 	let mut tex_y:u32;
 	while y <= math.draw_e {
 		tex_y = tex_pos as u32;
