@@ -1,12 +1,11 @@
 use crate::Tdata;
 use crate::Tmath;
 use crate::Ttex;
+use crate::color::draw_the_texture;
 use macroquad::window::screen_height;
 use macroquad::window::screen_width;
-use macroquad::shapes::draw_line;
-use macroquad::color::GRAY;
-use macroquad::color::WHITE;
-use crate::color::draw_the_texture;
+use macroquad::color:: GRAY;
+use macroquad::prelude::BLACK;
 
 
 pub fn calculate_init(math:&mut Tmath, data:& Tdata, x:i32) {
@@ -48,7 +47,7 @@ pub fn calculate_step(math:&mut Tmath, data:& Tdata) {
 	}
 }
 
-pub fn perform_dda(math:&mut Tmath, map:&Vec<Vec<i32>>) {
+pub fn perform_dda(math:&mut Tmath, map: &[Vec<i32>] ) {
 	//println!("mapx x = {} mapy = {}", math.mapx, math.mapy);
 	while math.hit == 0 {
 		if math.side_distx < math.side_disty {
@@ -86,15 +85,17 @@ pub fn calcul_draw(math:&mut Tmath) {
 	}
 }
 
-pub fn draw_the_line( data: &Tdata, math:& Tmath, texture:&Ttex, x:f32) {
+pub fn draw_the_line( data: &mut Tdata, math:& Tmath, texture:&Ttex, x:f32) {
 	//draw ceiling
-	draw_line(x, 0.0, x, math.draw_s as f32, 1.0, GRAY);
-
+	for y in 0..math.draw_s {
+		data.windows.set_pixel(x as u32, y, GRAY);
+	}
 	//draw wall
-	draw_the_texture(&data, &math, texture);
+	draw_the_texture(data, math, texture);
 
 	//draw floor
 	if math.draw_e == (screen_height() - 1.0) as u32 { return ; }
-	draw_line(x, math.draw_e as f32, x, screen_height() , 1.0, WHITE);
-
+	for y in math.draw_e..screen_height() as u32 {
+		data.windows.set_pixel(x as u32, y, BLACK);
+	}
 }

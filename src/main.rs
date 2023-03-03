@@ -27,7 +27,6 @@ pub struct Tmath {
 	curent_x:i32,
 }
 
-#[derive(Default)]
 pub struct Tdata {
 	pos_x:f32,
 	pos_y:f32,
@@ -35,6 +34,7 @@ pub struct Tdata {
 	dir_y:f32,
 	plane_x:f32,
 	plane_y:f32,
+	windows:Image,
 }
 
 pub struct Ttex {
@@ -46,11 +46,10 @@ pub struct Ttex {
 
 fn conf() -> Conf {
 	Conf {
-		window_width:1920,
-		window_height: 1080,
+		window_width:1280,
+		window_height: 720,
 		window_title: String::from("CUB3D"),
 		window_resizable:true,
-		sample_count:32768,
 		..Default::default()
 	}
 }
@@ -61,42 +60,44 @@ async fn main() {
 		for y in 0..map[x].len() {
 			print!("{}", map[x][y]);
 		}
-		println!("");
+		println!();
 	}
 
-	let mut data:Tdata = Tdata::default();
-	data.pos_x = 1.0;
-	data.pos_y = 1.0;
-	data.dir_x = 1.0;
-	data.dir_y = 0.0;
-	data.plane_x = 0.0;
-	data.plane_y = 0.8;
+	let mut data:Tdata = Tdata {
+		pos_x: 2.0,
+		pos_y: 2.0,
+		dir_x: -1.0,
+		dir_y: 0.0,
+		plane_x: 0.0,
+		plane_y: 0.66,
+		windows: Image::gen_image_color(screen_width() as u16, screen_height() as u16, BLACK),
+	};
 	let texture:Ttex = Ttex {
-		tex_north: load_image("./tex_north.png").await.unwrap(),
-		tex_south: load_image("./tex_south.png").await.unwrap(),
-		tex_west: load_image("./tex_west.png").await.unwrap(),
-		tex_east: load_image("./tex_east.png").await.unwrap(),
+		tex_north: load_image("./texture/tex_north.png").await.unwrap(),
+		tex_south: load_image("./texture/tex_south.png").await.unwrap(),
+		tex_west: load_image("./texture/tex_west.png").await.unwrap(),
+		tex_east: load_image("./texture/tex_east.png").await.unwrap(),
 	};
 	loop {
-		if camera::handle_input(&mut data, &map) == 1 {
-			break ;
+		for x in 0..data.windows.width {
+			for y in 0..data.windows.height {
+				data.windows.set_pixel(x as u32,y as u32, WHITE);
+			}
 		}
+		camera::handle_input(&mut data, &map);
 		for x in 0..(screen_width() as i32) {
-			let mut math:Tmath = Tmath::default();
+			let mut math:Tmath = Tmath { curent_x:x, ..Default::default() };
+			math.curent_x = x;
 			calcul::calculate_init(&mut math, &data, x);
 			calcul::calculate_step(&mut math, &data);
 			calcul::perform_dda(&mut math, &map);
 			calcul::calcul_draw(&mut math);
-			math.curent_x = x;
-			calcul::draw_the_line(&data,&math, &texture, x as f32);
+			calcul::draw_the_line(&mut data,&math, &texture, x as f32);
 		}
+		let image = Texture2D::from_image(&data.windows);
+		draw_texture(image, 0.0, 0.0, WHITE);
 		let fps = get_fps();
 		draw_text(fps.to_string().as_str(), 10.0, 10.0, 14.0, GREEN);
-		let minimum_frame_time = 1.0 / 60.0; // 60 FPS
-		let frame_time = get_frame_time();
-		if frame_time < minimum_frame_time {
-			let time_to_sleep = (minimum_frame_time - frame_time) * 1000.;
-		}
-			next_frame().await;
+		next_frame().await;
 	}
 }

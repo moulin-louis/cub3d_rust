@@ -9,7 +9,7 @@ edition = "2021"
 [profile.release]
 lto = "fat"
 debug = true
-codegen-units = 1
+opt-level = 3
 
 [profile.bench]
 debug = true
