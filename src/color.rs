@@ -51,12 +51,10 @@ pub fn draw_the_texture( data: &mut Tdata, math: &Tmath, texture:& Ttex) {
 			draw_this_tex(data, math, &texture.tex_west);
 		}
 	}
-	else {
-		if math.step_x == -1 {
+	else if math.step_x == -1 {
 			draw_this_tex(data ,math, &texture.tex_south);
 		}
-		else {
-			draw_this_tex(data, math, &texture.tex_north);
-		}
+	else {
+		draw_this_tex(data, math, &texture.tex_north);
 	}
 }
