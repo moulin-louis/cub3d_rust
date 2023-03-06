@@ -1,14 +1,13 @@
 use crate::Tdata;
-use std::process::exit;
 use macroquad::input::KeyCode::{Left, Right, Escape, W, A, S, D};
 use macroquad::prelude::*;
 
 static ROTSPEED: f32 = 0.1;
 static MOVSPEED:f32 = 0.1;
 
-pub fn handle_input( data:&mut Tdata, map: &[Vec<i32>] ) {
+pub fn handle_input( data:&mut Tdata, map: &[Vec<i32>] ) -> i32 {
 	if is_key_down(Escape) {
-		exit(1);
+		return 1;
 	}
 	if is_key_down(Left) {
 		let mut old_var: f32;
@@ -68,4 +67,5 @@ pub fn handle_input( data:&mut Tdata, map: &[Vec<i32>] ) {
 			data.pos_y -= data.dir_x * MOVSPEED;
 		}
 	}
+	0
 }

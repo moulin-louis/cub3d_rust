@@ -3,18 +3,12 @@ name = "cub3d_rust"
 version = "0.1.0"
 edition = "2021"
 
-#[profile.dev.package.'*']
-#opt-level = 3
-
 [profile.release]
 incremental = true
-lto = "fat"
+lto = true
 debug = true
 opt-level = 3
 codegen-units = 1
-
-[profile.bench]
-debug = true
 
 [dependencies]
 macroquad = "0.3.25"

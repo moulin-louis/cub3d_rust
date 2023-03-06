@@ -84,7 +84,7 @@ async fn main() {
 				data.windows.set_pixel(x as u32,y as u32, WHITE);
 			}
 		}
-		camera::handle_input(&mut data, &map);
+		if camera::handle_input(&mut data, &map) == 1 { break; };
 		for x in 0..(screen_width() as i32) {
 			let mut math:Tmath = Tmath { curent_x:x, ..Default::default() };
 			math.curent_x = x;
@@ -99,5 +99,7 @@ async fn main() {
 		let fps = get_fps();
 		draw_text(fps.to_string().as_str(), 10.0, 10.0, 14.0, GREEN);
 		next_frame().await;
+		image.delete();
 	}
+	println!("test");
 }
