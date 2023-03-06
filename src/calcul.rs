@@ -28,7 +28,7 @@ pub fn calculate_step(math:&mut Tmath, data:& Tdata) {
 		math.step_x = -1;
 		math.side_distx = (data.pos_x - math.mapx as f32) * math.delta_distx;
 	}
-	else {`
+	else {
 		math.step_x = 1;
 		math.side_distx = (math.mapx as f32 + 1.0 - data.pos_x) * math.delta_distx;
 	}
