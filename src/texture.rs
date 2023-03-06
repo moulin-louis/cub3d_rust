@@ -1,7 +1,5 @@
 use macroquad::window::screen_height;
-use crate::Tmath;
-use crate::Ttex;
-use crate::Tdata;
+use crate::{Tdata, Tmath, Ttex};
 use macroquad::texture::Image;
 
 fn calcul_text_coor(texture: &Image, math: &Tmath, wall_hit:f32 ) -> u32  {
@@ -36,8 +34,7 @@ fn draw_this_tex( data: &mut Tdata, math: &Tmath, texture: &Image) {
 		if tex_y == texture.width as u32 {
 			tex_y -= 1;
 		}
-		let color = texture.get_pixel(x, tex_y);
-		data.windows.set_pixel(math.curent_x as u32, y, color);
+		data.windows.set_pixel(math.curent_x as u32, y, texture.get_pixel(x, tex_y));
 		y += 1;
 	}
 }

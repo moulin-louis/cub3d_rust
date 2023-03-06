@@ -1,12 +1,7 @@
-use crate::Tdata;
-use crate::Tmath;
-use crate::Ttex;
-use crate::color::draw_the_texture;
-use macroquad::window::screen_height;
-use macroquad::window::screen_width;
-use macroquad::color:: GRAY;
-use macroquad::prelude::BLACK;
-
+use crate::{Tdata, Tmath, Ttex};
+use crate::texture::draw_the_texture;
+use macroquad::window::{screen_width, screen_height};
+use macroquad::color::{BLUE, GRAY};
 
 pub fn calculate_init(math:&mut Tmath, data:& Tdata, x:i32) {
 	math.camera_x = 2.0 * (x as f32) / screen_width() - 1.0;
@@ -33,7 +28,7 @@ pub fn calculate_step(math:&mut Tmath, data:& Tdata) {
 		math.step_x = -1;
 		math.side_distx = (data.pos_x - math.mapx as f32) * math.delta_distx;
 	}
-	else {
+	else {`
 		math.step_x = 1;
 		math.side_distx = (math.mapx as f32 + 1.0 - data.pos_x) * math.delta_distx;
 	}
@@ -91,11 +86,14 @@ pub fn draw_the_line( data: &mut Tdata, math:& Tmath, texture:&Ttex, x:f32) {
 		data.windows.set_pixel(x as u32, y, GRAY);
 	}
 	//draw wall
+	// for y in math.draw_s..math.draw_e {
+	// 	data.windows.set_pixel(x as u32, y, GREEN);
+	// }
 	draw_the_texture(data, math, texture);
 
 	//draw floor
 	if math.draw_e == (screen_height() - 1.0) as u32 { return ; }
 	for y in math.draw_e..screen_height() as u32 {
-		data.windows.set_pixel(x as u32, y, BLACK);
+		data.windows.set_pixel(x as u32, y, BLUE);
 	}
 }
