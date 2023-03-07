@@ -2,6 +2,7 @@ use crate::{Tdata, Tmath, Ttex};
 use crate::texture::draw_the_texture;
 use macroquad::window::{screen_width, screen_height};
 use macroquad::color::{BLUE, GRAY};
+use macroquad::shapes::draw_line;
 
 pub fn calculate_init(math:&mut Tmath, data:& Tdata, x:i32) {
 	math.camera_x = 2.0 * (x as f32) / screen_width() - 1.0;
@@ -82,9 +83,10 @@ pub fn calcul_draw(math:&mut Tmath) {
 
 pub fn draw_the_line( data: &mut Tdata, math:& Tmath, texture:&Ttex, x:f32) {
 	//draw ceiling
-	for y in 0..math.draw_s {
-		data.windows.set_pixel(x as u32, y, GRAY);
-	}
+	draw_line(x, 0.0, x, math.draw_s as f32, 1.0, GRAY);
+	// for y in 0..math.draw_s {
+	// 	data.windows.set_pixel(x as u32, y, GRAY);
+	// }
 	//draw wall
 	// for y in math.draw_s..math.draw_e {
 	// 	data.windows.set_pixel(x as u32, y, GREEN);
@@ -93,7 +95,8 @@ pub fn draw_the_line( data: &mut Tdata, math:& Tmath, texture:&Ttex, x:f32) {
 
 	//draw floor
 	if math.draw_e == (screen_height() - 1.0) as u32 { return ; }
-	for y in math.draw_e..screen_height() as u32 {
-		data.windows.set_pixel(x as u32, y, BLUE);
-	}
+	draw_line(x, math.draw_e as f32, x, screen_height(), 1.0, BLUE);
+	// for y in math.draw_e..screen_height() as u32 {
+	// 	data.windows.set_pixel(x as u32, y, BLUE);
+	// }
 }

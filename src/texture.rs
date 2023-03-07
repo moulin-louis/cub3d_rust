@@ -1,6 +1,10 @@
+use macroquad::color::WHITE;
+use macroquad::math::Rect;
+use macroquad::prelude::Texture2D;
 use macroquad::window::screen_height;
 use crate::{Tdata, Tmath, Ttex};
-use macroquad::texture::Image;
+use macroquad::texture::{draw_texture_ex, DrawTextureParams, Image};
+
 
 fn calcul_text_coor(texture: &Image, math: &Tmath, wall_hit:f32 ) -> u32  {
 	let mut result:u32;
@@ -26,17 +30,26 @@ fn draw_this_tex( data: &mut Tdata, math: &Tmath, texture: &Image) {
 	let x: u32 = calcul_text_coor(texture, math, wall_hit);
 	let step: f32 = (1.0 * texture.height as f32) / math.line_height as f32;
 	let mut tex_pos: f32 = (math.draw_s as f32 - screen_height() / 2.0 + math.line_height as f32 / 2.0) * step;
-	let mut y:u32 = math.draw_s;
-	let mut tex_y:u32;
-	while y <= math.draw_e {
-		tex_y = tex_pos as u32;
-		tex_pos += step;
-		if tex_y == texture.width as u32 {
-			tex_y -= 1;
-		}
-		data.windows.set_pixel(math.curent_x as u32, y, texture.get_pixel(x, tex_y));
-		y += 1;
-	}
+	// let mut y:u32 = math.draw_s;
+	// let mut tex_y:u32;
+	// while y <= math.draw_e {
+	// 	tex_y = tex_pos as u32;
+	// 	tex_pos += step;
+	// 	if tex_y == texture.width as u32 {
+	// 		tex_y -= 1;
+	// 	}
+	// 	data.windows.set_pixel(math.curent_x as u32, y, texture.get_pixel(x, tex_y));
+	// 	y += 1;
+	// }
+	let mut params:DrawTextureParams = DrawTextureParams::default();
+	let rec: Rect = Rect {
+		x: math.curent_x as f32,
+		y: tex_pos,
+		w: 1.0,
+		h: math.draw_e as f32,
+	};
+	params.source = Option::Some(rec);
+	draw_texture_ex(data.texture, math.curent_x as f32, math.draw_s as f32, WHITE, params);
 }
 
 pub fn draw_the_texture( data: &mut Tdata, math: &Tmath, texture:& Ttex) {
